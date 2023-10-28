@@ -7,7 +7,7 @@ from PyPDF2 import PdfReader
 app = Flask(__name__)
 
 # Configure OpenAI with your API key
-openai.api_key = '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'
+openai.api_key = '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'
 
 @app.route('/')
 def home():
