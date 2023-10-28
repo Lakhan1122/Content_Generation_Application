@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Text Generator</title>
+    <style>
+        body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.chat-container {
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    margin: 20px auto;
+    border-radius: 5px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    background-color: #ff8800; /* Orange background color */
+    color: #fff;
+    padding: 10px;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+}
+
+.chat-body {
+    padding: 20px;
+    min-height: 200px;
+    background-color: #f2f2f2; /* Light gray background */
+    border-bottom: 1px solid #ccc;
+    overflow-y: auto;
+}
+
+.chat-input {
+    padding: 10px;
+}
+
+form {
+    display: flex;
+    align-items: center;
+}
+
+input[type="text"] {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+}
+
+button {
+    background-color: #ff4444; /* Red button */
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #ff0000; /* Darker red on hover */
+}
+
+    </style>
+</head>
+<body>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>Text Generator</h1>
+        </div>
+        <div class="chat-body" id="generate-text">
+            <!-- Text will appear here -->
+        </div>
+        <div class="chat-input">
+            <form method="post" action="/generate-text">
+                <input type="text" name="keyword" id="keyword" placeholder="Enter a keyword or prompt">
+                <button type="submit">Generate Text</button>
+            </form>
+        </div>
+    </div>
+    <!-- <h1>Text Generator</h1>
+    <form method="post" action="/generate-text">
+        <label for="keyword">Enter a keyword or prompt:</label>
+        <input type="text" name="keyword" id="keyword">
+        <button type="submit">Generate Text</button>
+    </form>
+    <div id="generated-text"></div> -->
+    <script>
+       
+        
+        document.querySelector('form').addEventListener('submit', function (event) {
+        event.preventDefault();
+        const keyword = document.querySelector('#keyword').value;
+
+        fetch('/generate-text', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ keyword }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            document.querySelector('#generate-text').textContent = data.text;
+        })
+        .catch(error => {
+            console.error(error);
+        });
+    });
+    </script>
+</body>
+</html>

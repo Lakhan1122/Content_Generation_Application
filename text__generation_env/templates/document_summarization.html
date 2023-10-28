@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Summarization</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            text-align: center;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            padding: 30px;
+            width: 100%;
+        }
+
+        h1 {
+            font-size: 28px;
+            color: #333;
+        }
+
+        form {
+            margin-top: 20px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+
+        input[type="text"],
+        input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        input[type="submit"] {
+            background-color: #333;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #555;
+        }
+
+        #summaryResult {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .animated {
+            animation-duration: 1s;
+            animation-fill-mode: both;
+        }
+
+        .fadeIn {
+            animation-name: fadeIn;
+        }
+
+        @keyframes fadeIn {
+            0% { opacity: 0; transform: translateY(-10px); }
+            100% { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container animated fadeIn">
+        <h1>Document Summarization</h1>
+        <form id="summarizationForm" action="/summarization" method="POST" enctype="multipart/form-data">
+            <div>
+                <label for="summaryRequest">Summary Request</label>
+                <input type="text" id="summaryRequest" name="summaryRequest" placeholder="Enter a request">
+            </div>
+            <div>
+                <label for="files">Upload Files</label>
+                <input type="file" id="files" name="files" multiple>
+            </div>
+            <div>
+                <input type="submit" value="Summarize">
+            </div>
+        </form>
+        <div id="summaryResult">
+            <!-- Display the summary result here -->
+        </div>
+    </div>
+
+    <script>
+        const form = document.getElementById('summarizationForm');
+        const summaryResult = document.getElementById('summaryResult');
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const formData = new FormData(form);
+
+            try {
+                const response = await fetch('/summarization', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.status === 200) {
+                    const data = await response.json();
+                    summaryResult.textContent = `Summary: ${data.summary}`;
+                } else {
+                    const data = await response.json();
+                    summaryResult.textContent = `Error: ${data.error}`;
+                }
+            } catch (error) {
+                summaryResult.textContent = `Error: ${error.message}`;
+            }
+        });
+    </script>
+</body>
+</html>
